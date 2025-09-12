@@ -65,16 +65,6 @@ var users = new List<User>();
 var providers = new List<ServiceProvider>();
 var appointments = new List<Appointment>();
 
-// Root test endpoint
-app.MapGet("/", () => "getService API is running.");
-
-// Explicit hello endpoint (matches README and frontend proxy)
-app.MapGet("/api/hello", () =>
-{
-    var response = new { message = "Hello from GetService API!", timestamp = DateTime.UtcNow };
-    return Results.Ok(response);
-});
- 
 // Enable attribute controllers (so Controllers/HelloController will work if included in the project)
 app.MapControllers();
 
