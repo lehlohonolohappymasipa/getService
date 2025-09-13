@@ -4,7 +4,8 @@ using System;
 namespace GetService.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    // Keep route explicit to avoid accidental collisions with minimal APIs
+    [Route("api/hello")]
     public class HelloController : ControllerBase
     {
         [HttpGet]
