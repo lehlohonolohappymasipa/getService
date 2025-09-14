@@ -124,3 +124,36 @@ If you need more help, run:
 bash ./scripts/git-diagnose.sh
 ```
 and share the output.
+
+{
+  "clientId": "638d6c5e-e35b-4ce9-a0a4-1fe708e3cbed",
+  "clientSecret": "~-n8Q~ehGu3jfjzn6AMhqlX1CcraXl0WFU6hNa2R",
+  "subscriptionId": "42f35c9f-722e-429a-889f-77d825906316",
+  "tenantId": "a0845731-39bc-498c-8719-c4dbf44906b4",
+  "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+  "resourceManagerEndpointUrl": "https://management.azure.com/",
+  "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+  "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+  "galleryEndpointUrl": "https://gallery.azure.com/",
+  "managementEndpointUrl": "https://management.core.windows.net/"
+}
+
+az ad sp create-for-rbac \
+  --name "getservice-frontend-oidc" \
+  --role contributor \
+  --scopes /subscriptions/42f35c9f-722e-429a-889f-77d825906316/resourceGroups/getService-rg \
+  --sdk-auth
+
+
+{
+  "clientId": "638d6c5e-e35b-4ce9-a0a4-1fe708e3cbed",
+  "clientSecret": "1rf8Q~xGi8iGz1TFAQ8d.TJp7b_S74ak91olUc-p",
+  "subscriptionId": "42f35c9f-722e-429a-889f-77d825906316",
+  "tenantId": "a0845731-39bc-498c-8719-c4dbf44906b4",
+  "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+  "resourceManagerEndpointUrl": "https://management.azure.com/",
+  "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+  "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+  "galleryEndpointUrl": "https://gallery.azure.com/",
+  "managementEndpointUrl": "https://management.core.windows.net/"
+}
