@@ -7,7 +7,7 @@ function App() {
   useEffect(() => {
     const fetchMessage = async () => {
       try {
-        const res = await fetch("getservice-api-edg0b0gbaqctgwbe.southafricanorth-01.azurewebsites.net");
+        const res = await fetch("/api/hello");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         setMessage(data?.message ?? JSON.stringify(data));

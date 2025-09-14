@@ -22,23 +22,23 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        working-directory: ./getservice-frontend
+        working-directory: ./frontend
         run: npm ci
 
       - name: Build
-        working-directory: ./getservice-frontend
+        working-directory: ./frontend
         run: npm run build
 
       - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID_FRONTEND }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID_FRONTEND }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_FRONTEND }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy to Azure Static Web App
         uses: Azure/static-web-apps-deploy@v1
         with:
-          app_location: getservice-frontend
-          output_location: getservice-frontend/dist
+          app_location: frontend
+          output_location: dist
           azure_static_web_apps_api_token: ${{ secrets.AZURE_CLIENT_ID_FRONTEND }}
