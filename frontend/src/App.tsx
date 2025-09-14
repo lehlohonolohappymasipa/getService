@@ -5,14 +5,20 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/hello")
-      .then((res) => {
+    const fetchMessage = async () => {
+      try {
+        const res = await fetch("getservice-api-edg0b0gbaqctgwbe.southafricanorth-01.azurewebsites.net");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then((data) => setMessage(data?.message ?? JSON.stringify(data)))
-      .catch((err) => setMessage("Error: " + (err?.message || err)))
-      .finally(() => setLoading(false));
+        const data = await res.json();
+        setMessage(data?.message ?? JSON.stringify(data));
+      } catch (err: any) {
+        setMessage("Error: " + (err?.message || err));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMessage();
   }, []);
 
   return (
@@ -26,8 +32,7 @@ function App() {
           <p className="animate-pulse text-lg text-gray-200">Loading...</p>
         ) : (
           <p className="text-lg font-medium">
-            Backend says:{" "}
-            <span className="font-bold text-yellow-300">{message}</span>
+            Backend says: <span className="font-bold text-yellow-300">{message}</span>
           </p>
         )}
 
