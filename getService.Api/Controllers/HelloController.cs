@@ -11,7 +11,7 @@ namespace GetService.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var response = new { message = "Hello from GetService API!", timestamp = DateTime.UtcNow };
+            var response = new { message = $"Backend is Live @ {DateTime.UtcNow}"};
             return Ok(response);
         }
     }

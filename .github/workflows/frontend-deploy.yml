@@ -42,3 +42,4 @@ jobs:
           app_location: frontend
           output_location: dist
           azure_static_web_apps_api_token: ${{ secrets.AZURE_CLIENT_ID_FRONTEND }}
+          action: "upload"
