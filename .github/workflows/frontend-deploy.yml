@@ -41,5 +41,5 @@ jobs:
         with:
           app_location: frontend
           output_location: dist
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_CLIENT_ID_FRONTEND }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_BLUE_FIELD_070493D03 }}
           action: "upload"
