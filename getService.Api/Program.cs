@@ -1,43 +1,10 @@
 using Microsoft.OpenApi.Models;
-using System;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.ResponseCompression;
-using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(); // Optional: for testing endpoints in Swagger
-builder.Services.AddControllers();
-
-// Configure response compression (improves network efficiency)
-builder.Services.AddResponseCompression(options =>
-{
-    options.EnableForHttps = true;
-    options.Providers.Add<BrotliCompressionProvider>();
-    options.Providers.Add<GzipCompressionProvider>();
-});
-builder.Services.Configure<BrotliCompressionProviderOptions>(opts => opts.Level = System.IO.Compression.CompressionLevel.Fastest);
-builder.Services.Configure<GzipCompressionProviderOptions>(opts => opts.Level = System.IO.Compression.CompressionLevel.Fastest);
-
-// Configure CORS from configuration (Frontend:AllowedOrigins), fallback to localhost:3000 for dev
-var allowedOrigins = builder.Configuration.GetSection("Frontend:AllowedOrigins").Get<string[]>();
-if (allowedOrigins == null || allowedOrigins.Length == 0)
-{
-    allowedOrigins = new[] { "http://localhost:3000" };
-}
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("FrontendPolicy", policy =>
-    {
-        policy.WithOrigins(allowedOrigins)
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
-    });
-});
 
 var app = builder.Build();
 
@@ -48,16 +15,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Forwarded headers so reverse proxies (NGINX, etc.) work properly
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
-
-// Apply response compression and CORS policy (before routing/mapping endpoints)
-app.UseResponseCompression();
-app.UseCors("FrontendPolicy");
-
 app.UseHttpsRedirection();
 
 // In-memory stores (temporary)
@@ -65,8 +22,8 @@ var users = new List<User>();
 var providers = new List<ServiceProvider>();
 var appointments = new List<Appointment>();
 
-// Enable attribute controllers (so Controllers/HelloController will work if included in the project)
-app.MapControllers();
+// Root test endpoint
+app.MapGet("/", () => "Welcome to getService MVP!");
 
 // ------------------------
 // User Endpoints

@@ -1,18 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace GetService.Api.Controllers
 {
     [ApiController]
-    // Keep route explicit to avoid accidental collisions with minimal APIs
-    [Route("api/hello")]
+    [Route("api/[controller]")]
     public class HelloController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get()
-        {
-            var response = new { message = $"Backend is Live @ {DateTime.UtcNow}"};
-            return Ok(response);
-        }
+        public IActionResult Get() => Ok(new { message = "Backend is Live!" });
     }
 }
