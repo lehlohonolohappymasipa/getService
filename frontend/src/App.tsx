@@ -29,18 +29,32 @@ export default function App() {
   const textRef = useRef<HTMLDivElement | null>(null); // NEW: ref for the inner text
 
   // --- new helper: fetch latest message (reusable) ---
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL =
+    import.meta.env.VITE_API_URL && import.meta.env.VITE_API_URL !== "undefined"
+      ? import.meta.env.VITE_API_URL
+      : "";
+
   const fetchLatestMessage = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/hello`);
+      // Use relative path if API_URL is empty (production)
+      const url =
+        API_URL && API_URL.length > 0
+          ? `${API_URL}/api/hello`
+          : `/api/hello`;
+      const res = await fetch(url);
       if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: ${await res.text()}`);
+        // Try to parse error as text, fallback to status
+        let errText = "";
+        try {
+          errText = await res.text();
+        } catch {}
+        throw new Error(`HTTP ${res.status}: ${errText || res.statusText}`);
       }
       const data = await res.json();
       setMessage(data?.message ?? JSON.stringify(data));
     } catch (err: any) {
-      console.error('API Error:', err);
-      setMessage(`Error: ${err?.message || 'Failed to fetch'}`);
+      console.error("API Error:", err);
+      setMessage(`Error: ${err?.message || "Failed to fetch"}`);
       // Optionally retry after delay
       setTimeout(fetchLatestMessage, 5000);
     }
