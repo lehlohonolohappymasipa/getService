@@ -41,10 +41,8 @@ export default function App() {
 
   const fetchLatestMessage = async () => {
     try {
-      // Use relative path if API_URL is empty (production)
       const res = await fetch(url);
       if (!res.ok) {
-        // Try to parse error as text, fallback to status
         let errText = "";
         try {
           errText = await res.text();
@@ -56,7 +54,6 @@ export default function App() {
     } catch (err: any) {
       console.error("API Error:", err);
       setMessage(`Error: ${err?.message || "Failed to fetch"}`);
-      // Optionally retry after delay
       setTimeout(fetchLatestMessage, 5000);
     }
   };
