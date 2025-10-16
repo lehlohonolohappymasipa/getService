@@ -39,8 +39,11 @@ export default function App() {
 
   const fetchLatestMessage = async () => {
     try {
-      const res = await fetch(url);
+      const res = await fetch("/api/hello");
       const text = await res.text();
+
+      // Log raw response for debugging
+      console.debug("API raw response:", text);
 
       // Try to parse as JSON, but handle HTML error pages gracefully
       let data;
@@ -48,8 +51,10 @@ export default function App() {
         data = JSON.parse(text);
       } catch {
         // If response is HTML, show a friendly error
-        if (text.startsWith("<!DOCTYPE") || text.startsWith("<html")) {
-          throw new Error("API returned HTML instead of JSON. Check SWA config and backend health.");
+        if (text.trim().startsWith("<!DOCTYPE") || text.trim().startsWith("<html")) {
+          throw new Error(
+            "API returned HTML instead of JSON. This usually means the backend endpoint is unreachable or misconfigured. Check your SWA rewrite and backend health."
+          );
         }
         throw new Error("API response is not valid JSON.");
       }
