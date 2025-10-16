@@ -34,13 +34,14 @@ export default function App() {
       ? import.meta.env.VITE_API_URL
       : "";
 
+  const url =
+    API_URL && API_URL.length > 0
+      ? `${API_URL}/api/hello`
+      : `/api/hello`;
+
   const fetchLatestMessage = async () => {
     try {
       // Use relative path if API_URL is empty (production)
-      const url =
-        API_URL && API_URL.length > 0
-          ? `${API_URL}/api/hello`
-          : `/api/hello`;
       const res = await fetch(url);
       if (!res.ok) {
         // Try to parse error as text, fallback to status
