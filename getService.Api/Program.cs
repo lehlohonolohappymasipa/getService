@@ -14,43 +14,53 @@ builder.Services.AddCors(options =>
 });
 
 // Add services
-builder.Services.AddControllers();              // ✅ Enable controllers
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 var logger = app.Logger;
-
 logger.LogInformation("🚀 Application starting up...");
 
-app.MapGet("/api/hello", () =>
+// Global exception logging
+app.Use(async (context, next) =>
 {
-    logger.LogInformation("✅ /api/hello endpoint was hit");
-    return Results.Ok(new { message = "Backend is Live!" });
+    try
+    {
+        await next();
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Unhandled exception");
+        throw;
+    }
 });
 
-// Enable CORS
-app.UseCors();
+// Middleware order
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
-// Enable Swagger in development
+app.UseRouting();
+app.UseCors();
+app.UseAuthorization();
+
+// Swagger in development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseRouting();
-
-app.MapControllers();                           // ✅ Map attribute-routed controllers
-
-// ------------------------
-// Minimal API Endpoints
-// ------------------------
+// Minimal APIs
 app.MapGet("/", () => "Welcome to getService MVP!");
-
-// ✅ Health-check endpoint
+app.MapGet("/api/hello", () =>
+{
+    logger.LogInformation("✅ /api/hello endpoint was hit");
+    return Results.Ok(new { message = "Backend is Live!" });
+});
 app.MapGet("/api/health", () =>
 {
     return Results.Ok(new
@@ -60,5 +70,8 @@ app.MapGet("/api/health", () =>
         timestamp = DateTime.UtcNow
     });
 });
+
+// Controllers
+app.MapControllers();
 
 app.Run();
