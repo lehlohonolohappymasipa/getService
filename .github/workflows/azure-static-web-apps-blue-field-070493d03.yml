@@ -39,7 +39,7 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_BLUE_FIELD_070493D03 }}
           action: "upload"
           app_location: "./frontend"
-          api_location: "./getService.Api" # Update this line
+          api_location: "" # Update this line
           output_location: "dist"
           skip_api_build: false # Add this line
           github_id_token: ${{ steps.idtoken.outputs.result }}
