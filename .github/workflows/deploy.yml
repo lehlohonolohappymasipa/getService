@@ -1,9 +1,4 @@
-name: Build and Deploy getService
-
-# Prevent multiple simultaneous runs
-concurrency:
-  group: deploy-getService-main
-  cancel-in-progress: true
+name: Deploy getService Backend
 
 on:
   push:
@@ -11,7 +6,7 @@ on:
       - main  # triggers deployment on main branch
 
 jobs:
-  build-and-deploy:
+  deploy-backend:
     runs-on: ubuntu-latest
 
     permissions:
@@ -23,34 +18,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js for Vite
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      # 2️⃣ Cache NuGet packages to speed up builds
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
         with:
-          node-version: '20'
+          path: ~/.nuget/packages
+          key: nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            nuget-
 
-      # 3️⃣ Install frontend dependencies
-      - name: Install frontend dependencies
-        run: npm install
-        working-directory: ./frontend
-
-      # 4️⃣ Build Vite frontend
-      - name: Build Vite frontend
-        run: npm run build
-        working-directory: ./frontend
-
-      # 5️⃣ Setup .NET SDK
+      # 3️⃣ Setup .NET SDK
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
 
-      # 6️⃣ Build .NET API
+      # 4️⃣ Build .NET API
       - name: Build .NET API
-        run: dotnet publish -c Release -o ./publish
+        run: dotnet publish -c Release -o ./getService.Api/bin/publish
         working-directory: ./getService.Api
 
-      # 7️⃣ Login to Azure via OIDC (for backend App Service)
+      # 5️⃣ Login to Azure via OIDC
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -58,18 +46,9 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # 8️⃣ Deploy Vite frontend to Azure Static Web App
-      - name: Deploy Vite frontend
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: "upload"
-          app_location: "./frontend"
-          output_location: "dist"
-
-      # 9️⃣ Deploy .NET backend to App Service
+      # 6️⃣ Deploy .NET backend to App Service
       - name: Deploy .NET backend
         uses: azure/webapps-deploy@v3
         with:
           app-name: getService-api
-          package: ./getService.Api/publish
+          package: ./getService.Api/bin/publish
