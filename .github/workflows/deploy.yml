@@ -33,14 +33,17 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      # 4️⃣ Build .NET API
-      - name: Build .NET API
-        run: dotnet publish -c Release -o ./bin/publish
+      # 4️⃣ Restore, Build, and Publish .NET API
+      - name: Restore, Build, and Publish .NET API
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o ./publish
         working-directory: ./getService.Api
 
       # 5️⃣ Debug: List published files
       - name: List published files
-        run: ls -R ./getService.Api/bin/publish
+        run: ls -R ./getService.Api/publish
 
       # 6️⃣ Login to Azure via OIDC
       - name: Azure Login
@@ -55,4 +58,4 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: getService-api
-          package: ./getService.Api/bin/publish
+          package: ./getService.Api/publish
