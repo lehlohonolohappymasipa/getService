@@ -3,14 +3,14 @@ name: Deploy getService Backend
 on:
   push:
     branches:
-      - main  # triggers deployment on main branch
+      - main
 
 jobs:
   deploy-backend:
     runs-on: ubuntu-latest
 
     permissions:
-      id-token: write      # required for OIDC login
+      id-token: write
       contents: read
 
     steps:
@@ -18,7 +18,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Cache NuGet packages to speed up builds
+      # 2️⃣ Cache NuGet packages
       - name: Cache NuGet packages
         uses: actions/cache@v3
         with:
@@ -33,19 +33,21 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      # 4️⃣ Restore, Build, and Publish .NET API
-      - name: Restore, Build, and Publish .NET API
-        run: |
-          dotnet restore
-          dotnet build --configuration Release
-          dotnet publish -c Release -o ./publish
+      # 4️⃣ Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore
         working-directory: ./getService.Api
 
-      # 5️⃣ Debug: List published files
+      # 5️⃣ Build and publish .NET API
+      - name: Build and publish .NET API
+        run: dotnet publish -c Release -o ./publish
+        working-directory: ./getService.Api
+
+      # 6️⃣ List published files (debugging)
       - name: List published files
         run: ls -R ./getService.Api/publish
 
-      # 6️⃣ Login to Azure via OIDC
+      # 7️⃣ Azure Login
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -53,7 +55,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # 7️⃣ Deploy .NET backend to App Service
+      # 8️⃣ Deploy .NET backend
       - name: Deploy .NET backend
         uses: azure/webapps-deploy@v3
         with:
