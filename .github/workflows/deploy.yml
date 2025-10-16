@@ -14,23 +14,23 @@ jobs:
       contents: read
 
     steps:
-      # 1️⃣ Checkout the code
+      # 1️⃣ Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js for React
+      # 2️⃣ Setup Node.js for Vite
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      # 3️⃣ Install React dependencies
-      - name: Install React dependencies
+      # 3️⃣ Install frontend dependencies
+      - name: Install frontend dependencies
         run: npm install
         working-directory: ./frontend
 
-      # 4️⃣ Build React app
-      - name: Build React app
+      # 4️⃣ Build Vite frontend
+      - name: Build Vite frontend
         run: npm run build
         working-directory: ./frontend
 
@@ -45,7 +45,7 @@ jobs:
         run: dotnet publish -c Release -o ./publish
         working-directory: ./getService.Api
 
-      # 7️⃣ Login to Azure via OIDC
+      # 7️⃣ Login to Azure via OIDC (for backend App Service)
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -53,14 +53,17 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # 8️⃣ Deploy React frontend
-      - name: Deploy React frontend
-        uses: azure/webapps-deploy@v3
+      # 8️⃣ Deploy Vite frontend to Azure Static Web App
+      - name: Deploy Vite frontend
+        uses: Azure/static-web-apps-deploy@v1
         with:
-          app-name: getService-frontend
-          package: ./frontend/build
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "./frontend"
+          output_location: "dist"
 
-      # 9️⃣ Deploy .NET backend
+      # 9️⃣ Deploy .NET backend to App Service
       - name: Deploy .NET backend
         uses: azure/webapps-deploy@v3
         with:
