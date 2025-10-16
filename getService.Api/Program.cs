@@ -20,6 +20,16 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+var logger = app.Logger;
+
+logger.LogInformation("🚀 Application starting up...");
+
+app.MapGet("/api/hello", () =>
+{
+    logger.LogInformation("✅ /api/hello endpoint was hit");
+    return Results.Ok(new { message = "Backend is Live!" });
+});
+
 // Enable CORS
 app.UseCors();
 
