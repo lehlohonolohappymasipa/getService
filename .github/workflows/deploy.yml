@@ -35,10 +35,14 @@ jobs:
 
       # 4️⃣ Build .NET API
       - name: Build .NET API
-        run: dotnet publish -c Release -o ./getService.Api/bin/publish
+        run: dotnet publish -c Release -o ./bin/publish
         working-directory: ./getService.Api
 
-      # 5️⃣ Login to Azure via OIDC
+      # 5️⃣ Debug: List published files
+      - name: List published files
+        run: ls -R ./getService.Api/bin/publish
+
+      # 6️⃣ Login to Azure via OIDC
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -46,7 +50,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # 6️⃣ Deploy .NET backend to App Service
+      # 7️⃣ Deploy .NET backend to App Service
       - name: Deploy .NET backend
         uses: azure/webapps-deploy@v3
         with:
