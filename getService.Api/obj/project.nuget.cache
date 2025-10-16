@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "gQ4yUQuERRE=",
+  "dgSpecHash": "BEH7m3UH7Ws=",
   "success": true,
   "projectFilePath": "C:\\Users\\Lehlohonolo\\OneDrive - Nelson Mandela University\\Desktop\\getService\\getService.Api\\getService.Api.csproj",
   "expectedPackageFiles": [
@@ -10,7 +10,10 @@
     "C:\\Users\\Lehlohonolo\\.nuget\\packages\\swashbuckle.aspnetcore\\9.0.4\\swashbuckle.aspnetcore.9.0.4.nupkg.sha512",
     "C:\\Users\\Lehlohonolo\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\9.0.4\\swashbuckle.aspnetcore.swagger.9.0.4.nupkg.sha512",
     "C:\\Users\\Lehlohonolo\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\9.0.4\\swashbuckle.aspnetcore.swaggergen.9.0.4.nupkg.sha512",
-    "C:\\Users\\Lehlohonolo\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\9.0.4\\swashbuckle.aspnetcore.swaggerui.9.0.4.nupkg.sha512"
+    "C:\\Users\\Lehlohonolo\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\9.0.4\\swashbuckle.aspnetcore.swaggerui.9.0.4.nupkg.sha512",
+    "C:\\Users\\Lehlohonolo\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\9.0.8\\microsoft.netcore.app.runtime.win-x86.9.0.8.nupkg.sha512",
+    "C:\\Users\\Lehlohonolo\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\9.0.8\\microsoft.windowsdesktop.app.runtime.win-x86.9.0.8.nupkg.sha512",
+    "C:\\Users\\Lehlohonolo\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\9.0.8\\microsoft.aspnetcore.app.runtime.win-x86.9.0.8.nupkg.sha512"
   ],
   "logs": []
 }
