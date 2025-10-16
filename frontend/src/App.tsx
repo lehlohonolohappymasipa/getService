@@ -33,11 +33,16 @@ export default function App() {
   const fetchLatestMessage = async () => {
     try {
       const res = await fetch(`${API_URL}/api/hello`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${await res.text()}`);
+      }
       const data = await res.json();
       setMessage(data?.message ?? JSON.stringify(data));
     } catch (err: any) {
-      setMessage("Error: " + (err?.message || err));
+      console.error('API Error:', err);
+      setMessage(`Error: ${err?.message || 'Failed to fetch'}`);
+      // Optionally retry after delay
+      setTimeout(fetchLatestMessage, 5000);
     }
   };
 
