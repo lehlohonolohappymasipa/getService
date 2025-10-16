@@ -34,22 +34,26 @@ export default function App() {
       ? import.meta.env.VITE_API_URL
       : "";
 
-  const url =
-    API_URL && API_URL.length > 0
-      ? `${API_URL}/api/hello`
-      : `/api/hello`;
+  // Always use relative path for SWA routing
+  const url = "/api/hello";
 
   const fetchLatestMessage = async () => {
     try {
       const res = await fetch(url);
-      if (!res.ok) {
-        let errText = "";
-        try {
-          errText = await res.text();
-        } catch {}
-        throw new Error(`HTTP ${res.status}: ${errText || res.statusText}`);
+      const text = await res.text();
+
+      // Try to parse as JSON, but handle HTML error pages gracefully
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        // If response is HTML, show a friendly error
+        if (text.startsWith("<!DOCTYPE") || text.startsWith("<html")) {
+          throw new Error("API returned HTML instead of JSON. Check SWA config and backend health.");
+        }
+        throw new Error("API response is not valid JSON.");
       }
-      const data = await res.json();
+
       setMessage(data?.message ?? JSON.stringify(data));
     } catch (err: any) {
       console.error("API Error:", err);
