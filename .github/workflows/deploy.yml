@@ -40,7 +40,7 @@ jobs:
 
       # 5️⃣ Build and publish .NET API
       - name: Build and publish .NET API
-        run: dotnet publish -c Release -o ./publish
+        run: dotnet publish -c Release -r win-x64 --self-contained false -o ./publish
         working-directory: ./getService.Api
 
       # 6️⃣ List published files (debugging)
