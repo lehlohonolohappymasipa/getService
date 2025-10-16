@@ -5,11 +5,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add CORS policy
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    options.AddDefaultPolicy(policy =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
+        policy.WithOrigins("https://blue-field-070493d03.1.azurestaticapps.net")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
