@@ -29,9 +29,10 @@ export default function App() {
   const textRef = useRef<HTMLDivElement | null>(null); // NEW: ref for the inner text
 
   // --- new helper: fetch latest message (reusable) ---
+  const API_URL = import.meta.env.VITE_API_URL;
   const fetchLatestMessage = async () => {
     try {
-      const res = await fetch("/api/hello");
+      const res = await fetch(`${API_URL}/api/hello`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setMessage(data?.message ?? JSON.stringify(data));
