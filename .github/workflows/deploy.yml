@@ -1,5 +1,10 @@
 name: Build and Deploy getService
 
+# 🔹 Prevent multiple simultaneous runs
+concurrency:
+  group: deploy-getService-main
+  cancel-in-progress: true
+
 on:
   push:
     branches:
