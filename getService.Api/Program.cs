@@ -56,11 +56,6 @@ if (app.Environment.IsDevelopment())
 
 // Minimal APIs
 app.MapGet("/", () => "Welcome to getService MVP!");
-app.MapGet("/api/hello", () =>
-{
-    logger.LogInformation("✅ /api/hello endpoint was hit");
-    return Results.Ok(new { message = "Backend is Live!" });
-});
 app.MapGet("/api/health", () =>
 {
     return Results.Ok(new
